@@ -1,0 +1,25 @@
+{
+  "name": "cypress-serverest-e2e",
+  "version": "1.0.0",
+  "description": "Suíte de testes E2E e de API com Cypress + TypeScript contra o ServeRest (loja virtual para estudo de testes).",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "cypress run",
+    "test:api": "cypress run --spec \"cypress/e2e/api/**/*.cy.ts\"",
+    "test:ui": "cypress run --spec \"cypress/e2e/ui/**/*.cy.ts\"",
+    "test:smoke": "cypress run --expose grepTags=@smoke,grepFilterSpecs=true",
+    "open": "cypress open",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cypress/grep": "^7.0.0",
+    "@faker-js/faker": "^10.6.0",
+    "@types/node": "^22.20.5",
+    "cypress": "^16.3.0",
+    "cypress-mochawesome-reporter": "^5.0.0",
+    "dotenv": "^18.0.0",
+    "typescript": "^7.0.2",
+    "zod": "^4.6.7"
+  }
+}
