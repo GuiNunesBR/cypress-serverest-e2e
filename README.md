@@ -13,9 +13,10 @@ Suíte de automação **E2E (interface) e de API** em **Cypress + TypeScript** c
 | **API** | usuários (cadastro, duplicidade, campos obrigatórios, consulta, exclusão), login (válido, senha errada, e-mail inexistente), produtos (CRUD, token, duplicidade, preço inválido, filtro), carrinho e conclusão de compra |
 | **UI · admin** | login (sucesso, erro e logout), cadastro de usuário pela tela pública e pelo painel, cadastro e exclusão de produto |
 | **UI · cliente** | busca de produto na loja e montagem da lista de compras (quantidade e preço) |
+| **Acessibilidade** | 9 telas auditadas com axe-core (WCAG 2.1 A e AA), com linha de base das pendências conhecidas |
 | **Contrato** | toda resposta relevante da API é validada com schemas [Zod](https://zod.dev) |
 
-São **27 testes** (18 de API e 9 de UI). Os cenários mais importantes levam a tag `@smoke` (`npm run test:smoke`).
+São **36 testes** (18 de API, 9 de UI e 9 de acessibilidade). Os cenários mais importantes levam a tag `@smoke` (`npm run test:smoke`) e os de acessibilidade, `@a11y` (`npm run test:a11y`).
 
 ## Como rodar
 
@@ -28,6 +29,7 @@ npm test              # tudo (API + UI), com relatório em cypress/reports/html
 npm run test:api      # só API
 npm run test:ui       # só interface
 npm run test:smoke    # só os cenários @smoke
+npm run test:a11y     # só acessibilidade
 npm run open          # modo interativo
 ```
 
@@ -42,6 +44,22 @@ O relatório é gerado com [cypress-mochawesome-reporter](https://github.com/Lir
 - **Prints.** Cada cenário de UI tira prints da tela inteira nos pontos-chave; em caso de falha, entra também o print do momento do erro.
 - **Confirmação no backend.** Depois da ação na tela, o teste consulta a API para conferir que o dado foi gravado (ou removido) de verdade.
 
+## Acessibilidade
+
+As 9 telas do front (públicas, painel do admin e loja do cliente) passam pelo [axe-core](https://github.com/dequelabs/axe-core) com os critérios **WCAG 2.1 A e AA**. A lista de páginas e a linha de base são as mesmas nos projetos Playwright e Cypress.
+
+O front já tem violações hoje, então o teste não exige zero: cada página tem uma **linha de base** com as regras já conhecidas, e o teste **falha se aparecer uma regra nova**. O resultado completo do axe (regra, impacto, elementos afetados e link de referência) fica anexado a cada teste no relatório.
+
+Pendências conhecidas do ServeRest:
+
+| Regra | Impacto | Onde | O que é |
+|---|---|---|---|
+| `image-alt` | crítico | todas as telas | imagens (logo e fotos de produto) sem texto alternativo |
+| `color-contrast` | sério | todas as telas | textos e botões abaixo do contraste mínimo de 4.5:1 |
+| `link-name` | sério | vitrine do cliente (`/home`) | o link de cada produto envolve só a imagem sem `alt`, então fica sem nome para leitores de tela |
+
+O `cypress-axe` ainda não declara suporte ao Cypress 16, então o `axe-core` é injetado direto na página (`cypress/support/a11y/axe.ts`).
+
 ## Estrutura
 
 ```
@@ -50,6 +68,7 @@ cypress/
     api/          testes de API
     ui/           testes de interface
   support/
+    a11y/         páginas auditadas, linha de base e análise com axe
     api/          cliente da API (um método por endpoint) e schemas Zod
     data/         fábricas de dados únicos (faker)
     pages/        Page Objects da interface
@@ -76,7 +95,7 @@ cypress/
 
 ## Comparativo: Cypress × Playwright
 
-Mesmos 27 cenários, mesma máquina (Windows, Chromium/Electron), contra o ServeRest público. Os tempos variam com a rede e servem como ordem de grandeza, não como benchmark.
+Mesmos 27 cenários funcionais, mesma máquina (Windows, Chromium/Electron), contra o ServeRest público. Os tempos variam com a rede e servem como ordem de grandeza, não como benchmark.
 
 | | Playwright | Cypress |
 |---|---|---|
@@ -88,6 +107,7 @@ Mesmos 27 cenários, mesma máquina (Windows, Chromium/Electron), contra o Serve
 | **Setup e limpeza** | fixtures com teardown por teste e projetos de setup/teardown | hooks globais (`afterEach`) e `before/after` por spec |
 | **Relatório** | HTML nativo com passos, anexos, vídeo e trace | precisa de reporter externo (mochawesome); prints embutidos |
 | **Depuração** | trace viewer (linha do tempo, DOM e rede de cada passo) | Test Runner interativo com *time travel* |
+| **Acessibilidade** | `@axe-core/playwright`, pacote oficial da Deque | `cypress-axe` ainda sem suporte ao Cypress 16; `axe-core` injetado à mão |
 | **Asserções de texto** | `toContainText` normaliza espaços | `contain.text` compara o texto cru |
 
 Na prática: o Playwright ganhou em velocidade, paralelismo e testes de API puros. O Cypress ganhou na interceptação de rede e no modo interativo para escrever e depurar testes de interface.

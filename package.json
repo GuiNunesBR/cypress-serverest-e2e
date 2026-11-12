@@ -9,6 +9,7 @@
     "test:api": "cypress run --spec \"cypress/e2e/api/**/*.cy.ts\"",
     "test:ui": "cypress run --spec \"cypress/e2e/ui/**/*.cy.ts\"",
     "test:smoke": "cypress run --expose grepTags=@smoke,grepFilterSpecs=true",
+    "test:a11y": "cypress run --expose grepTags=@a11y,grepFilterSpecs=true",
     "open": "cypress open",
     "typecheck": "tsc --noEmit"
   },
@@ -16,6 +17,7 @@
     "@cypress/grep": "^7.0.0",
     "@faker-js/faker": "^10.6.0",
     "@types/node": "^22.20.5",
+    "axe-core": "^4.14.0",
     "cypress": "^16.3.0",
     "cypress-mochawesome-reporter": "^5.0.0",
     "dotenv": "^18.0.0",
