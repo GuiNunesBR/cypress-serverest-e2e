@@ -87,6 +87,18 @@ cypress/
 - **Funções em vez de comandos customizados.** Cliente de API, captura e evidências são funções TypeScript importadas, sem `Cypress.Commands.add`: tipagem direta e sem declarações globais.
 - **CI.** Checagem de tipos, execução completa, relatório como artefato e publicação no GitHub Pages na branch `main`.
 
+## Falhas conhecidas
+
+Falhas do alvo, não da suíte. Ficam marcadas com o motivo e o link.
+
+| Teste | Desde | Situação |
+|---|---|---|
+| `produtos-admin.cy.ts` › cadastra um produto e o encontra na listagem | 16/11/2026 | `it.skip`, com o link na linha anterior. Correção proposta em [ServeRest/front#42](https://github.com/ServeRest/front/pull/42). |
+
+Desde o ServeRest 3.4.0 ([ServeRest#571](https://github.com/ServeRest/ServeRest/pull/571)), a API recusa `preco` e `quantidade` enviados como texto, como o contrato sempre declarou. O front ainda envia texto, e o cadastro pela tela recebe 400 (`preco deve ser um número`). Os testes de API seguem passando, porque mandam números.
+
+O Cypress não tem equivalente ao `test.fail` do Playwright: o teste fica pulado, e o aviso de que a correção chegou vem da versão Playwright desta suíte.
+
 ## Observações sobre o alvo
 
 - O `data-testid` do botão de cadastrar produto no front é `cadastarProdutos` (sem o "r"). Foi mantido como está.
