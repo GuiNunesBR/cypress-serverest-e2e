@@ -11,10 +11,7 @@ describe('UI · Produtos (admin)', () => {
   const cadastro = new CadastrarProdutoPage();
   const listagem = new ListarProdutosPage();
 
-  // Falha conhecida: desde o ServeRest 3.4.0 a API recusa preco e quantidade em texto, e o front ainda envia texto.
-  // O Cypress não tem test.fail como o Playwright: o teste fica pulado até a correção ser publicada.
-  // Correção proposta em https://github.com/ServeRest/front/pull/42
-  it.skip('cadastra um produto e o encontra na listagem', { tags: '@smoke' }, () => {
+  it('cadastra um produto e o encontra na listagem', { tags: '@smoke' }, () => {
     const produto = novoProduto();
     limpeza.produtoPorNome(produto.nome, admin().token);
 
