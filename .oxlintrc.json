@@ -1,0 +1,64 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript"],
+  "categories": { "correctness": "off" },
+  "overrides": [
+    {
+      "files": ["cypress/support/api/**", "cypress/support/a11y/**"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["../**"], "message": "api e a11y são a base: não dependem das outras camadas." }]
+        }]
+      }
+    },
+    {
+      "files": ["cypress/support/data/**"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [
+            { "group": ["../api/*"], "allowTypeImports": true, "message": "As fábricas usam só os tipos da API, sem chamá-la." },
+            { "group": ["../a11y/*", "../pages/*", "../evidencias", "../limpeza", "../sessao", "**/e2e/**"], "message": "As fábricas só geram dados: não dependem das outras camadas." }
+          ]
+        }]
+      }
+    },
+    {
+      "files": ["cypress/support/pages/**"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [
+            { "group": ["../api/*"], "allowTypeImports": true, "message": "Page Object só conhece a tela: chamadas de API ficam nos testes." },
+            { "group": ["../a11y/*", "../data/*", "../evidencias", "../limpeza", "../sessao", "**/e2e/**"], "message": "Page Object só conhece a tela: dados, sessão e limpeza ficam nos testes." }
+          ]
+        }]
+      }
+    },
+    {
+      "files": ["cypress/support/evidencias.ts", "cypress/support/limpeza.ts"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["./pages/*", "./a11y/*", "./sessao", "**/e2e/**"], "message": "Evidências e limpeza não dirigem a tela nem dependem da sessão ou dos testes." }]
+        }]
+      }
+    },
+    {
+      "files": ["cypress/e2e/api/**"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [
+            { "group": ["**/support/pages/*", "**/support/a11y/*", "**/support/evidencias"], "message": "Teste de API não abre a tela: sem Page Objects, prints ou axe." },
+            { "group": ["**/*.cy"], "message": "Um teste não importa outro." }
+          ]
+        }]
+      }
+    },
+    {
+      "files": ["cypress/e2e/ui/**"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["**/*.cy"], "message": "Um teste não importa outro." }]
+        }]
+      }
+    }
+  ]
+}

@@ -31,6 +31,7 @@ npm run test:ui       # só interface
 npm run test:smoke    # só os cenários @smoke
 npm run test:a11y     # só acessibilidade
 npm run open          # modo interativo
+npm run lint          # confere as camadas (quem pode importar o quê)
 ```
 
 Para apontar para outro ambiente, copie `.env.example` para `.env` e ajuste `FRONT_URL` e `API_URL`.
@@ -85,7 +86,8 @@ cypress/
 - **Limpeza garantida.** O teste registra o que criou em `limpeza`, e um `afterEach` global apaga tudo, mesmo quando o teste falha. O que nasce pela interface é localizado no final pelo e-mail ou pelo nome.
 - **Sessão reaproveitada.** Nos specs do admin, um usuário é criado no `before`, entra pela tela uma vez com `cy.session` e é removido no `after`.
 - **Funções em vez de comandos customizados.** Cliente de API, captura e evidências são funções TypeScript importadas, sem `Cypress.Commands.add`: tipagem direta e sem declarações globais.
-- **CI.** Checagem de tipos, execução completa, relatório como artefato e publicação no GitHub Pages na branch `main`.
+- **Camadas conferidas no lint.** O [oxlint](https://oxc.rs/docs/guide/usage/linter) aplica a regra `no-restricted-imports` do ESLint por pasta (`.oxlintrc.json`): `api` e `a11y` não dependem de ninguém, Page Objects e fábricas só usam os *tipos* da API, evidências e limpeza não dirigem a tela, e os testes de API não importam Page Objects, prints nem axe. O oxlint entra no lugar do ESLint porque o `typescript-eslint` ainda não suporta o TypeScript 7.
+- **CI.** Checagem de tipos, lint das camadas, execução completa, relatório como artefato e publicação no GitHub Pages na branch `main`.
 
 ## Observações sobre o alvo
 

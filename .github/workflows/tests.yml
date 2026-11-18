@@ -36,6 +36,7 @@ jobs:
       - run: npm ci
       - run: npx cypress install
       - run: npm run typecheck
+      - run: npm run lint
       - run: npm test
       - name: Guarda o relatório HTML
         if: ${{ !cancelled() && hashFiles('cypress/reports/html/index.html') != '' }}
