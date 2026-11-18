@@ -15,8 +15,9 @@ Suíte de automação **E2E (interface) e de API** em **Cypress + TypeScript** c
 | **UI · cliente** | busca de produto na loja e montagem da lista de compras (quantidade e preço) |
 | **Acessibilidade** | 9 telas auditadas com axe-core (WCAG 2.1 A e AA), com linha de base das pendências conhecidas |
 | **Contrato** | toda resposta relevante da API é validada com schemas [Zod](https://zod.dev) |
+| **Unidade** | fábricas de dados, schemas e lista de páginas auditadas, com [Vitest](https://vitest.dev), sem navegador e sem rede |
 
-São **36 testes** (18 de API, 9 de UI e 9 de acessibilidade). Os cenários mais importantes levam a tag `@smoke` (`npm run test:smoke`) e os de acessibilidade, `@a11y` (`npm run test:a11y`).
+São **49 testes**: 13 de unidade (Vitest) e 36 no Cypress (18 de API, 9 de UI e 9 de acessibilidade). Os cenários mais importantes levam a tag `@smoke` (`npm run test:smoke`) e os de acessibilidade, `@a11y` (`npm run test:a11y`).
 
 ## Como rodar
 
@@ -26,6 +27,7 @@ Requisitos: Node 22 ou superior.
 npm ci
 npx cypress install   # baixa o binário do Cypress, se o npm não tiver baixado
 npm test              # tudo (API + UI), com relatório em cypress/reports/html
+npm run test:unit     # só unidade (Vitest, sem navegador e sem rede)
 npm run test:api      # só API
 npm run test:ui       # só interface
 npm run test:smoke    # só os cenários @smoke
@@ -64,6 +66,7 @@ O `cypress-axe` ainda não declara suporte ao Cypress 16, então o `axe-core` é
 ## Estrutura
 
 ```
+unit/           testes de unidade do código de apoio (Vitest)
 cypress/
   e2e/
     api/          testes de API
@@ -85,6 +88,7 @@ cypress/
 - **Dados isolados e únicos.** Cada teste cria seus próprios dados com sufixo único, porque o ServeRest é compartilhado.
 - **Limpeza garantida.** O teste registra o que criou em `limpeza`, e um `afterEach` global apaga tudo, mesmo quando o teste falha. O que nasce pela interface é localizado no final pelo e-mail ou pelo nome.
 - **Sessão reaproveitada.** Nos specs do admin, um usuário é criado no `before`, entra pela tela uma vez com `cy.session` e é removido no `after`.
+- **Unidade fora do Cypress.** O código de apoio que não usa `cy` (fábricas, schemas, páginas auditadas) é testado com Vitest em segundos, porque o Cypress só roda testes dentro do navegador.
 - **Funções em vez de comandos customizados.** Cliente de API, captura e evidências são funções TypeScript importadas, sem `Cypress.Commands.add`: tipagem direta e sem declarações globais.
 - **Camadas conferidas no lint.** O [oxlint](https://oxc.rs/docs/guide/usage/linter) aplica a regra `no-restricted-imports` do ESLint por pasta (`.oxlintrc.json`): `api` e `a11y` não dependem de ninguém, Page Objects e fábricas só usam os *tipos* da API, evidências e limpeza não dirigem a tela, e os testes de API não importam Page Objects, prints nem axe. O oxlint entra no lugar do ESLint porque o `typescript-eslint` ainda não suporta o TypeScript 7.
 - **CI.** Checagem de tipos, lint das camadas, execução completa, relatório como artefato e publicação no GitHub Pages na branch `main`.

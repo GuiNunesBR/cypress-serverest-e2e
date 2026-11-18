@@ -59,6 +59,14 @@
           "patterns": [{ "group": ["**/*.cy"], "message": "Um teste não importa outro." }]
         }]
       }
+    },
+    {
+      "files": ["unit/**"],
+      "rules": {
+        "typescript/no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["**/support/pages/*", "**/support/api/serverest", "**/support/a11y/axe", "**/support/evidencias", "**/support/limpeza", "**/support/sessao", "**/support/e2e"], "message": "Teste de unidade cobre só o código puro: sem cy, sem navegador e sem rede." }]
+        }]
+      }
     }
   ]
 }

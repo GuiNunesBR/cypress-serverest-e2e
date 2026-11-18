@@ -6,13 +6,14 @@
   "license": "MIT",
   "scripts": {
     "test": "cypress run",
+    "test:unit": "vitest run --dir unit",
     "test:api": "cypress run --spec \"cypress/e2e/api/**/*.cy.ts\"",
     "test:ui": "cypress run --spec \"cypress/e2e/ui/**/*.cy.ts\"",
     "test:smoke": "cypress run --expose grepTags=@smoke,grepFilterSpecs=true",
     "test:a11y": "cypress run --expose grepTags=@a11y,grepFilterSpecs=true",
     "open": "cypress open",
     "typecheck": "tsc --noEmit",
-    "lint": "oxlint --deny-warnings cypress"
+    "lint": "oxlint --deny-warnings cypress unit"
   },
   "devDependencies": {
     "@cypress/grep": "^7.0.0",
@@ -24,6 +25,7 @@
     "dotenv": "^18.0.0",
     "oxlint": "^1.91.0",
     "typescript": "^7.0.2",
+    "vitest": "^4.1.12",
     "zod": "^4.6.7"
   }
 }

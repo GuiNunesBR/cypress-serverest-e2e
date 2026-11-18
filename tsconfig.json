@@ -9,5 +9,5 @@
     "noEmit": true,
     "types": ["cypress", "node", "cypress-mochawesome-reporter"]
   },
-  "include": ["cypress/**/*.ts", "cypress.config.ts"]
+  "include": ["cypress/**/*.ts", "unit/**/*.ts", "cypress.config.ts"]
 }
