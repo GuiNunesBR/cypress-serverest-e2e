@@ -2,6 +2,8 @@
 
 [![Testes](https://github.com/GuiNunesBR/cypress-serverest-e2e/actions/workflows/tests.yml/badge.svg)](https://github.com/GuiNunesBR/cypress-serverest-e2e/actions/workflows/tests.yml)
 
+**Português** · [English](README.en.md)
+
 Suíte de automação **E2E (interface) e de API** em **Cypress + TypeScript** contra o [ServeRest](https://serverest.dev), uma loja virtual pública criada para estudo de testes.
 
 É a versão Cypress do [playwright-serverest-e2e](https://github.com/GuiNunesBR/playwright-serverest-e2e): **mesmos cenários, mesmos dados, mesmos contratos**, para comparar as duas ferramentas lado a lado. O comparativo está no fim deste arquivo.
@@ -26,7 +28,7 @@ Requisitos: Node 22 ou superior.
 ```bash
 npm ci
 npx cypress install   # baixa o binário do Cypress, se o npm não tiver baixado
-npm test              # tudo (API + UI), com relatório em cypress/reports/html
+npm test              # API e UI no Cypress, com relatório em cypress/reports/html
 npm run test:unit     # só unidade (Vitest, sem navegador e sem rede)
 npm run test:api      # só API
 npm run test:ui       # só interface
@@ -100,7 +102,7 @@ cypress/
 - **Unidade fora do Cypress.** O código de apoio que não usa `cy` (fábricas, schemas, páginas auditadas) é testado com Vitest em segundos, porque o Cypress só roda testes dentro do navegador.
 - **Funções em vez de comandos customizados.** Cliente de API, captura e evidências são funções TypeScript importadas, sem `Cypress.Commands.add`: tipagem direta e sem declarações globais.
 - **Camadas conferidas no lint.** O [oxlint](https://oxc.rs/docs/guide/usage/linter) aplica a regra `no-restricted-imports` do ESLint por pasta (`.oxlintrc.json`): `api` e `a11y` não dependem de ninguém, Page Objects e fábricas só usam os *tipos* da API, evidências e limpeza não dirigem a tela, e os testes de API não importam Page Objects, prints nem axe. O oxlint entra no lugar do ESLint porque o `typescript-eslint` ainda não suporta o TypeScript 7.
-- **CI.** Checagem de tipos, lint das camadas, execução completa, relatório como artefato e publicação no GitHub Pages na branch `main`.
+- **CI.** Checagem de tipos, lint das camadas, testes de unidade, execução completa, relatório como artefato e publicação no GitHub Pages na branch `main`.
 
 ## Observações sobre o alvo
 
