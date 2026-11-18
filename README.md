@@ -83,6 +83,15 @@ cypress/
 .github/workflows/tests.yml   CI (GitHub Actions) com relatório no GitHub Pages
 ```
 
+## Modelo de execução
+
+- **Specs em sequência.** O `cypress run` executa um spec por vez, em ordem alfabética do caminho (`api/` antes de `ui/`), e dentro do spec os testes seguem a ordem do arquivo. Não há paralelismo local; cada spec ganha uma página nova.
+- **Isolamento entre testes.** Com `testIsolation` ligado (padrão), o Cypress limpa cookies, `localStorage` e a página antes de cada teste. Por isso o login precisa ser restaurado a cada teste.
+- **Hooks globais** (`cypress/support/e2e.ts`). O `afterEach` global roda depois de cada teste de todos os specs, passou ou falhou, e apaga o que o teste registrou em `limpeza`.
+- **Hooks por spec.** Nos specs do admin, `usarAdminDaSuite()` registra três hooks: o `before` cria um admin pela API, o `beforeEach` entra com ele pela tela e o `after` o remove no fim do spec.
+- **`cy.session`.** O primeiro `beforeEach` faz o login pela tela e guarda cookies e `localStorage` com a chave do e-mail; nos testes seguintes do spec, o Cypress só restaura a sessão, sem passar pela tela de novo.
+- **Falhas e retries.** Cada comando espera até 7 s. No CI, um teste que falha roda mais uma vez. Se um `before` ou `beforeEach` falhar, o Cypress pula o resto dos testes daquele bloco, e o relatório mostra isso.
+
 ## Decisões de projeto
 
 - **Dados isolados e únicos.** Cada teste cria seus próprios dados com sufixo único, porque o ServeRest é compartilhado.
