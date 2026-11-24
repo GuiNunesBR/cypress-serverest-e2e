@@ -50,4 +50,25 @@ describe('UI · Cadastro de usuário', () => {
     cadastro.alerta().should('contain.text', 'Este email já está sendo usado');
     evidencia('alerta de e-mail duplicado');
   });
+
+  it('exige nome, e-mail e senha', () => {
+    cadastro.abrir();
+
+    capturarApi('POST', '/usuarios', () => cadastro.enviar()).then((resposta) => {
+      expect(resposta.status).to.eq(400);
+      expect(resposta.corpo).to.deep.eq({
+        nome: 'nome é obrigatório',
+        email: 'email é obrigatório',
+        password: 'password é obrigatório',
+      });
+    });
+
+    // Cada alerta traz também o botão de fechar (×), por isso a comparação é por conteúdo.
+    cadastro.alerta().should('have.length', 3);
+    cadastro.alerta().eq(0).should('contain.text', 'Nome é obrigatório');
+    cadastro.alerta().eq(1).should('contain.text', 'Email é obrigatório');
+    cadastro.alerta().eq(2).should('contain.text', 'Password é obrigatório');
+    cy.location('pathname').should('eq', '/cadastrarusuarios');
+    evidencia('alertas de campos obrigatórios');
+  });
 });

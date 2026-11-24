@@ -1,6 +1,6 @@
 import { api } from '../../support/api/serverest';
 import { CadastroSchema, ListaProdutosSchema, validar } from '../../support/api/schemas';
-import { novoProduto } from '../../support/data/factories';
+import { novoProduto, termoSemResultado } from '../../support/data/factories';
 import { capturarApi, evidencia } from '../../support/evidencias';
 import { limpeza } from '../../support/limpeza';
 import { ListaDeComprasPage, LojaPage } from '../../support/pages/loja.page';
@@ -47,5 +47,21 @@ describe('UI · Loja (cliente)', () => {
     lista.quantidade().should('have.text', 'Total: 2');
     lista.preco().should('have.text', `Preço R$${produto.preco * 2}`);
     evidencia('lista de compras com duas unidades');
+  });
+
+  it('busca sem resultado avisa que nada foi encontrado', () => {
+    criarUsuarioComSessao('false').then((cliente) => {
+      login.abrir();
+      login.entrar(cliente.email, cliente.password);
+      cy.location('pathname').should('eq', '/home');
+    });
+
+    capturarApi('GET', /\/produtos\?nome=/, () => loja.pesquisar(termoSemResultado())).then((resposta) => {
+      expect(resposta.status).to.eq(200);
+      expect(validar(ListaProdutosSchema, resposta.corpo)).to.deep.eq({ quantidade: 0, produtos: [] });
+    });
+    loja.semResultado().should('be.visible');
+    loja.produtos().should('not.exist');
+    evidencia('busca sem resultado');
   });
 });

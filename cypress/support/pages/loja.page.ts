@@ -5,6 +5,7 @@ export class LojaPage {
   pesquisa = () => porTestId('pesquisar');
   pesquisarBotao = () => porTestId('botaoPesquisar');
   produtos = () => cy.get('.card');
+  semResultado = () => cy.contains('Nenhum produto foi encontrado');
 
   abrir(): void {
     cy.visit('/home');
