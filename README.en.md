@@ -14,14 +14,14 @@ The test names, comments and report steps are in Portuguese, like the app under 
 
 | Layer | Coverage |
 |---|---|
-| **API** | users (sign-up, duplicates, required fields, lookup, deletion), login (valid, wrong password, unknown email), products (CRUD, token, duplicates, invalid price, filter), cart and checkout |
-| **UI · admin** | login (success, error and logout), user sign-up through the public page and the admin panel, product creation and deletion |
-| **UI · customer** | product search in the store and building the shopping list (quantity and price) |
+| **API** | users (sign-up, duplicates, required fields, lookup, update, deletion, and deletion blocked by a cart), login (valid, wrong password, unknown email), products (CRUD, token, duplicates, invalid price, filter, deletion blocked by a cart), cart (checkout, stock reserved and given back on cancellation, insufficient stock, one cart per user) |
+| **UI · admin** | login (success, error and logout), user sign-up through the public page and the admin panel, required sign-up fields, product creation and deletion |
+| **UI · customer** | product search in the store, a search with no results, and building the shopping list (quantity and price) |
 | **Accessibility** | 9 pages audited with axe-core (WCAG 2.1 A and AA), against a baseline of known issues |
 | **Contract** | every relevant API response is validated with [Zod](https://zod.dev) schemas |
 | **Unit** | data factories, schemas and the list of audited pages, with [Vitest](https://vitest.dev), no browser and no network |
 
-There are **49 tests**: 13 unit tests (Vitest) and 36 in Cypress (18 API, 9 UI and 9 accessibility). The most important scenarios are tagged `@smoke` (`npm run test:smoke`) and the accessibility ones `@a11y` (`npm run test:a11y`).
+There are **59 tests**: 15 unit tests (Vitest) and 44 in Cypress (24 API, 11 UI and 9 accessibility). The most important scenarios are tagged `@smoke` (`npm run test:smoke`) and the accessibility ones `@a11y` (`npm run test:a11y`).
 
 ## Running
 

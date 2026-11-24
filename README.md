@@ -12,14 +12,14 @@ Suíte de automação **E2E (interface) e de API** em **Cypress + TypeScript** c
 
 | Camada | Cobertura |
 |---|---|
-| **API** | usuários (cadastro, duplicidade, campos obrigatórios, consulta, exclusão), login (válido, senha errada, e-mail inexistente), produtos (CRUD, token, duplicidade, preço inválido, filtro), carrinho e conclusão de compra |
-| **UI · admin** | login (sucesso, erro e logout), cadastro de usuário pela tela pública e pelo painel, cadastro e exclusão de produto |
-| **UI · cliente** | busca de produto na loja e montagem da lista de compras (quantidade e preço) |
+| **API** | usuários (cadastro, duplicidade, campos obrigatórios, consulta, edição, exclusão e exclusão bloqueada por carrinho), login (válido, senha errada, e-mail inexistente), produtos (CRUD, token, duplicidade, preço inválido, filtro, exclusão bloqueada por carrinho), carrinho (conclusão de compra, estoque reservado e devolvido no cancelamento, estoque insuficiente, um carrinho por usuário) |
+| **UI · admin** | login (sucesso, erro e logout), cadastro de usuário pela tela pública e pelo painel, campos obrigatórios do cadastro, cadastro e exclusão de produto |
+| **UI · cliente** | busca de produto na loja, busca sem resultado e montagem da lista de compras (quantidade e preço) |
 | **Acessibilidade** | 9 telas auditadas com axe-core (WCAG 2.1 A e AA), com linha de base das pendências conhecidas |
 | **Contrato** | toda resposta relevante da API é validada com schemas [Zod](https://zod.dev) |
 | **Unidade** | fábricas de dados, schemas e lista de páginas auditadas, com [Vitest](https://vitest.dev), sem navegador e sem rede |
 
-São **49 testes**: 13 de unidade (Vitest) e 36 no Cypress (18 de API, 9 de UI e 9 de acessibilidade). Os cenários mais importantes levam a tag `@smoke` (`npm run test:smoke`) e os de acessibilidade, `@a11y` (`npm run test:a11y`).
+São **59 testes**: 15 de unidade (Vitest) e 44 no Cypress (24 de API, 11 de UI e 9 de acessibilidade). Os cenários mais importantes levam a tag `@smoke` (`npm run test:smoke`) e os de acessibilidade, `@a11y` (`npm run test:a11y`).
 
 ## Como rodar
 
