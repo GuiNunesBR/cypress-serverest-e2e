@@ -28,7 +28,7 @@ interface Opcoes {
 }
 
 /** Faz a chamada sem falhar por status (quem testa é o teste) e anexa requisição e resposta ao relatório. */
-function chamar(metodo: 'GET' | 'POST' | 'DELETE', caminho: string, opcoes: Opcoes = {}): Cypress.Chainable<Resposta> {
+function chamar(metodo: 'GET' | 'POST' | 'PUT' | 'DELETE', caminho: string, opcoes: Opcoes = {}): Cypress.Chainable<Resposta> {
   const { body, qs, token } = opcoes;
   return cy
     .request({
@@ -58,6 +58,7 @@ export const api = {
   criarUsuario: (dados: object) => chamar('POST', '/usuarios', { body: dados }),
   buscarUsuario: (id: string) => chamar('GET', `/usuarios/${id}`),
   buscarUsuarioPorEmail: (email: string) => chamar('GET', '/usuarios', { qs: { email } }),
+  editarUsuario: (id: string, dados: object) => chamar('PUT', `/usuarios/${id}`, { body: dados }),
   excluirUsuario: (id: string) => chamar('DELETE', `/usuarios/${id}`),
 
   // ---- login
@@ -71,6 +72,7 @@ export const api = {
 
   // ---- carrinhos
   criarCarrinho: (produtos: ItemCarrinho[], token?: string) => chamar('POST', '/carrinhos', { body: { produtos }, token }),
+  buscarCarrinho: (id: string) => chamar('GET', `/carrinhos/${id}`),
   concluirCompra: (token?: string) => chamar('DELETE', '/carrinhos/concluir-compra', { token }),
   cancelarCompra: (token?: string) => chamar('DELETE', '/carrinhos/cancelar-compra', { token }),
 };

@@ -69,6 +69,28 @@ describe('API · Produtos', () => {
     });
   });
 
+  it('não exclui produto que faz parte de um carrinho', () => {
+    criarUsuarioComSessao('true').then((admin) => {
+      api.criarProduto(novoProduto({ quantidade: 10 }), admin.token).then((criado) => {
+        const { _id } = validar(CadastroSchema, criado.body);
+        limpeza.produto(_id, admin.token);
+
+        api.criarCarrinho([{ idProduto: _id, quantidade: 1 }], admin.token).then((carrinho) => {
+          const { _id: idCarrinho } = validar(CadastroSchema, carrinho.body);
+
+          api.excluirProduto(_id, admin.token).then((exclusao) => {
+            expect(exclusao.status).to.eq(400);
+            expect(exclusao.body).to.deep.eq({
+              message: 'Não é permitido excluir produto que faz parte de carrinho',
+              idCarrinhos: [idCarrinho],
+            });
+          });
+        });
+        api.buscarProduto(_id).its('status').should('eq', 200);
+      });
+    });
+  });
+
   it('exclui produto', () => {
     criarUsuarioComSessao('true').then((admin) => {
       api.criarProduto(novoProduto(), admin.token).then((criado) => {
