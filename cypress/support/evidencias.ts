@@ -8,6 +8,8 @@ let sequencia = 0;
 /**
  * Executa `acao` e devolve a resposta da chamada que o front fez para a API, anexando-a ao relatório.
  * `caminho` em texto compara só o path; uma RegExp é testada contra a URL completa.
+ * Se a ação falhar (um seletor que sumiu, por exemplo), o Cypress para no comando dela e o erro dela é o que
+ * aparece: o `cy.wait` nem chega a rodar.
  */
 export function capturarApi(metodo: string, caminho: string | RegExp, acao: () => void): Cypress.Chainable<RespostaCapturada> {
   const alias = `front${++sequencia}`;
