@@ -1,14 +1,60 @@
 # Cypress + TypeScript · ServeRest
 
+<p align="center"><img src="docs/banner.en.svg" alt="Cypress · ServeRest: UI and API tests against a public online store, with isolated data, validated contracts and published CI" width="100%"></p>
+
 [![Tests](https://github.com/GuiNunesBR/cypress-serverest-e2e/actions/workflows/tests.yml/badge.svg)](https://github.com/GuiNunesBR/cypress-serverest-e2e/actions/workflows/tests.yml)
+[![Cypress](https://img.shields.io/github/package-json/dependency-version/GuiNunesBR/cypress-serverest-e2e/dev/cypress?label=Cypress)](https://github.com/GuiNunesBR/cypress-serverest-e2e/blob/main/package.json)
+[![TypeScript](https://img.shields.io/github/package-json/dependency-version/GuiNunesBR/cypress-serverest-e2e/dev/typescript?label=TypeScript)](https://github.com/GuiNunesBR/cypress-serverest-e2e/blob/main/tsconfig.json)
+[![Node](https://img.shields.io/badge/Node-22%2B-339933)](https://github.com/GuiNunesBR/cypress-serverest-e2e/blob/main/package.json)
+[![MIT](https://img.shields.io/github/license/GuiNunesBR/cypress-serverest-e2e)](https://github.com/GuiNunesBR/cypress-serverest-e2e/blob/main/LICENSE)
 
 [Português](README.md) · **English**
+
+**UI and API tests in Cypress against a public online store: the tests create and delete their own data, validate the contracts of the responses and leave evidence in the published report.**
 
 An **end-to-end (UI) and API** test suite in **Cypress + TypeScript** against [ServeRest](https://serverest.dev), a public online store built for practising test automation.
 
 It is the Cypress version of [playwright-serverest-e2e](https://github.com/GuiNunesBR/playwright-serverest-e2e): **same scenarios, same data, same contracts**, to compare the two tools side by side. The comparison is at the end of this file.
 
 The test names, comments and report steps are in Portuguese, like the app under test.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph tests["tests"]
+    api["cypress/e2e/api/"]
+    ui["cypress/e2e/ui/ · UI and accessibility"]
+    unit["unit/ · Vitest"]
+  end
+  subgraph support["cypress/support/"]
+    hooks["session · cleanup · evidence"]
+    pages["page objects"]
+    client["API client<br/>and Zod schemas"]
+    data["data factories"]
+  end
+  subgraph target["ServeRest"]
+    front["front end"]
+    rest["API"]
+  end
+  api --> client
+  api --> data
+  ui --> hooks
+  ui --> pages
+  unit -.-> client
+  unit -.-> data
+  hooks --> client
+  pages --> front
+  client --> rest
+  front --> rest
+```
+
+In CI (GitHub Actions), every push goes through these steps; on `main`, the report is published to GitHub Pages:
+
+```mermaid
+flowchart LR
+  push["push or PR"] --> check["typecheck and lint"] --> unit["unit (Vitest)"] --> suite["API, UI and accessibility"] --> report["HTML report"] --> pages["GitHub Pages"]
+```
 
 ## What is tested
 
