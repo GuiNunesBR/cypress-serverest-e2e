@@ -115,7 +115,7 @@ cypress/
 
 ## Comparison: Cypress × Playwright
 
-The same 27 functional scenarios, on the same machine (Windows, Chromium/Electron), against the public ServeRest. Times vary with the network and are an order of magnitude, not a benchmark.
+The times were measured when both suites had 27 functional scenarios; they now have 35, and the times were not measured again. Same machine (Windows, Chromium/Electron), against the public ServeRest. Times vary with the network and are an order of magnitude, not a benchmark.
 
 | | Playwright | Cypress |
 |---|---|---|

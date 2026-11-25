@@ -113,7 +113,7 @@ cypress/
 
 ## Comparativo: Cypress × Playwright
 
-Mesmos 27 cenários funcionais, mesma máquina (Windows, Chromium/Electron), contra o ServeRest público. Os tempos variam com a rede e servem como ordem de grandeza, não como benchmark.
+Os tempos foram medidos quando as duas suítes tinham 27 cenários funcionais; hoje são 35, e os tempos não foram medidos de novo. Mesma máquina (Windows, Chromium/Electron), contra o ServeRest público. Os tempos variam com a rede e servem como ordem de grandeza, não como benchmark.
 
 | | Playwright | Cypress |
 |---|---|---|
